@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Matrix extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'key',
+        'schema',
+        'sections',
+    ];
+
+    protected $casts = [
+        'sections' => 'array',
+    ];
 }
