@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Matrix;
-use App\Models\Id;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -20,9 +19,6 @@ class MatrixController extends Controller
      */
     public function index(): Response
     {
-        // $id = new Id();
-        // $id3 = $id->generateId();
-        // return response($id3);
         return Inertia::render('Matrix/Index', [
             //
         ]);
