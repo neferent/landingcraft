@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Matrix;
 use App\Models\User;
+use App\Models\NanoId;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
-
-
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -17,10 +16,10 @@ class MatrixController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
         return Inertia::render('Matrix/Index', [
-            //
+            'matrices' => Matrix::where('user_id', $request->user()->id)->latest()->get(),
         ]);
     }
 
@@ -37,11 +36,11 @@ class MatrixController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $id = new Id();
+        $id = new NanoId;
         $matrix = new Matrix;
-
         $matrix->user_id = $request->user()->id;
-        $matrix->key = $id->generateId();
+        $matrix->key = $id->generateNanoId();
+        $matrix->name = $request->name;
         $matrix->schema = 'default';
         $matrix->sections = [];
         $matrix->save();
