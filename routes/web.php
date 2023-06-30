@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MatrixController;
+use App\Http\Controllers\EditMatrixController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,12 @@ Route::middleware('auth')->group(function () {
 Route::resource('matrix', MatrixController::class)
     ->only(['index', 'store'])
     ->middleware(['auth', 'verified']);
+
+Route::resource('edit-matrix', EditMatrixController::class)
+    ->only(['index'])
+    ->middleware(['auth']);
+
+
 
 
 
