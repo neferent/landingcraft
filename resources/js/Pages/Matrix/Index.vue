@@ -5,7 +5,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
 
-import Matrix from '@/Components/Matrix.vue';
+import MatrixLabel from '@/Components/MatrixLabel.vue';
 
 defineProps(['matrices']);
 
@@ -19,9 +19,7 @@ const form = useForm({
 <template>
   <div>
     <div>All Matrices:</div>
-
-
-    <Matrix v-for="matrix in matrices" :key="matrix.key" :matrix="matrix"></Matrix>
+    <MatrixLabel v-for="matrix in matrices" :key="matrix.key" :matrix="matrix" />
 
     <form @submit.prevent="form.post(route('matrix.store'))">
 

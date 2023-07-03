@@ -2,25 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EditMatrix;
 use App\Models\Matrix;
 use App\Models\User;
-use App\Models\NanoId;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
 
-class MatrixController extends Controller
+class EditMatrixController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request): Response
     {
-        return Inertia::render('Matrix/Index', [
-            'matrices' => Matrix::where('user_id', $request->user()->id)->latest()->get(),
-        ]);
+
     }
 
     /**
@@ -59,12 +57,9 @@ class MatrixController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request, Matrix $matrix)
+    public function edit(Matrix $matrix)
     {
-        return Inertia::render('Matrix/Edit', [
-            'matrix' => Matrix::where('key', $request->key)->latest()->get(),
-        ]);
-
+        //
     }
 
     /**

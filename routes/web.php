@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MatrixController;
+use App\Http\Controllers\EditMatrixController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -36,9 +37,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
 Route::resource('matrix', MatrixController::class)
     ->only(['index', 'store'])
+    ->except(['edit'])
     ->middleware(['auth', 'verified']);
+
+Route::get('matrix/{key}', [MatrixController::class, 'edit'])->name('matrix.edit');
+
+
+
 
 
 
