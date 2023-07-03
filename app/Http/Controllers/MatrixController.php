@@ -59,9 +59,12 @@ class MatrixController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Matrix $matrix)
+    public function edit(Request $request, Matrix $matrix)
     {
-        //
+        return Inertia::render('Matrix/Edit', [
+            'matrix' => Matrix::where('key', $request->key)->latest()->get(),
+        ]);
+
     }
 
     /**

@@ -18,9 +18,7 @@ class EditMatrixController extends Controller
      */
     public function index(Request $request): Response
     {
-        return Inertia::render('EditMatrix/Index', [
-            'matrix' => Matrix::where('name', 'dd')->latest()->get(),
-        ]);
+
     }
 
     /**

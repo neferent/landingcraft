@@ -37,13 +37,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
 Route::resource('matrix', MatrixController::class)
     ->only(['index', 'store'])
+    ->except(['edit'])
     ->middleware(['auth', 'verified']);
 
-Route::resource('edit-matrix', EditMatrixController::class)
-    ->only(['index'])
-    ->middleware(['auth']);
+Route::get('matrix/{key}', [MatrixController::class, 'edit'])->name('matrix.edit');
+
 
 
 
