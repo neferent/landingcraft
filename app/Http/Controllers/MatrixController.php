@@ -51,9 +51,11 @@ class MatrixController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Matrix $matrix)
+    public function show(Request $request, Matrix $matrix)
     {
-        //
+        return Inertia::render('Matrix/Show', [
+            'matrix' => Matrix::where('key', $request->key)->latest()->get(),
+        ]);
     }
 
     /**

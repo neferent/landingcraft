@@ -45,6 +45,10 @@ Route::resource('matrix', MatrixController::class)
 
 Route::get('matrix/{key}', [MatrixController::class, 'edit'])->name('matrix.edit');
 
+Route::resource('section', SectionController::class)
+    ->only(['store'])
+    ->middleware(['auth']);
+
 
 
 
