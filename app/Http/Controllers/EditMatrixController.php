@@ -43,7 +43,7 @@ class EditMatrixController extends Controller
         $matrix->sections = [];
         $matrix->save();
 
-        return redirect(route('matrix.index'));
+        return redirect('/matrix');
     }
 
     /**

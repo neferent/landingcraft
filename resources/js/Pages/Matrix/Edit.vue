@@ -1,6 +1,13 @@
 <script setup lang="ts">
 
-import { ref } from 'vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import TextInput from '@/Components/TextInput.vue';
+import { useForm } from '@inertiajs/vue3';
+
+import { onMounted, ref } from 'vue';
+
+
 
 const props = defineProps({
   matrix: {
@@ -9,9 +16,27 @@ const props = defineProps({
   },
 })
 
+let clone = ref(props.matrix);
+
+const form = useForm({
+  name: '',
+  key: '',
+})
+
 function addSection() {
-  console.log(props.matrix);
+  clone.value.sections.push('dddd');
+
 }
+
+onMounted(() => {
+  //clone = JSON.parse(JSON.stringify({...props.matrix}));
+  form.key = clone.value.key;
+  console.log('moufnted');
+  console.log(clone);
+  console.log(clone.value);
+
+  console.log(props.matrix);
+})
 
 
 
@@ -35,8 +60,8 @@ function addSection() {
 <template>
   <div>
     <div>Editing</div>
-    
-    {{ matrix }}
+
+    {{ clone }}
     <br />
     <!-- <div>{{ clone }}</div>
     <br /><br />{{  matrix.sections }}
@@ -47,6 +72,17 @@ function addSection() {
     <div v-for="section in matrix.sections">{{ section }}</div>
 
     -->
-    <div @click="addSection"> Add Section</div>
+
+    <form @submit.prevent="form.post('/matrix/section/update')">
+
+      <InputLabel for="name" value="Name :" />
+      <TextInput id="key" type="string" v-model="form.key" />
+      <TextInput id="name" type="string" v-model="form.name" autofocus />
+      <PrimaryButton class="mt-4">Add Section</PrimaryButton>
+
+    </form>
+
   </div>
 </template>
+
+

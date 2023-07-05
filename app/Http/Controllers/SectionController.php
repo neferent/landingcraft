@@ -15,9 +15,11 @@ class SectionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request): Response
     {
-        //
+        return Inertia::render('Section/Index', [
+            'sections' => Section::where('user_id', $request->user()->id)->latest()->get(),
+        ]);
     }
 
     /**
@@ -37,7 +39,7 @@ class SectionController extends Controller
         $newKey = $id->generateNanoId();
         $section = new Section;
         $section->user_id = $request->user()->id;
-        $section->key = $newKey
+        $section->key = $newKey;
         $section->name = $request->name;
         $section->type = $request->type;
         $section->modules = [];

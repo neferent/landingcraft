@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Matrix;
+use App\Models\Section;
 use App\Models\User;
 use App\Models\NanoId;
 use Illuminate\Http\Request;
@@ -45,7 +46,7 @@ class MatrixController extends Controller
         $matrix->sections = [];
         $matrix->save();
 
-        return redirect(route('matrix.index'));
+        return redirect('/matrix');
     }
 
     /**
@@ -54,17 +55,17 @@ class MatrixController extends Controller
     public function show(Request $request, Matrix $matrix)
     {
         return Inertia::render('Matrix/Show', [
-            'matrix' => Matrix::where('key', $request->key)->latest()->get(),
+            'matrix' => Matrix::where('name', $request->key),
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request, Matrix $matrix)
+    public function editMatrix(Request $request, Matrix $matrix)
     {
         return Inertia::render('Matrix/Edit', [
-            'matrix' => Matrix::where('key', $request->key)->latest()->get(),
+            'matrix' => Matrix::where('key', $request->key)->first(),
         ]);
 
     }
@@ -83,5 +84,61 @@ class MatrixController extends Controller
     public function destroy(Matrix $matrix)
     {
         //
+    }
+
+    public function updateSections(Request $request, Matrix $matrix, Section $section)
+    {
+       // $this->authorize('update', $matrix);
+
+        // $section = new Section;
+        // $section->user_id = $request->user()->id;
+        // $section->key = $id->generateNanoId();
+        // $section->sections = [];
+        // $section->save();
+
+        // return redirect('/matrix/edit');
+
+        $key = new NanoId;
+        $key = $key->generateNanoId();
+        $section = new Section;
+        $section->user_id = $request->user()->id;
+        $section->key = $key;
+        $section->modules = [];
+
+        $section->save();
+
+       $matrix = Matrix::where('key', $request->key)->first();
+       $sections = $matrix->sections;
+       array_push($sections, $key);
+       $matrix->sections = $sections;
+
+
+
+       $matrix->save();
+       //$matrix->name = 'newName';
+       //$matrix->save();
+
+       
+        //$matrix[0]->sections
+        //$sections = $matrix[0]->sections;
+
+        //$temp = $matrix[0]->sections;
+        //array_push($temp, 'test');
+        //$matrix[0]->sections = $temp;
+
+        
+        
+
+       //array_push($matrix[0]->sections, 'test');
+
+
+        //$matrix->update();
+
+       // $name = $m[0]->name;
+
+        //return $name;
+
+        
+// return $sections;
     }
 }
