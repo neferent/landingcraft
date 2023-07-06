@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Matrix;
+use App\Models\Section;
 use App\Models\User;
 use App\Models\NanoId;
 use Illuminate\Http\Request;
@@ -45,24 +46,26 @@ class MatrixController extends Controller
         $matrix->sections = [];
         $matrix->save();
 
-        return redirect(route('matrix.index'));
+        return redirect('/matrix');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Matrix $matrix)
+    public function show(Request $request, Matrix $matrix)
     {
-        //
+        return Inertia::render('Matrix/Show', [
+            'matrix' => Matrix::where('name', $request->key),
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request, Matrix $matrix)
+    public function editMatrix(Request $request, Matrix $matrix)
     {
         return Inertia::render('Matrix/Edit', [
-            'matrix' => Matrix::where('key', $request->key)->latest()->get(),
+            'matrix' => Matrix::where('key', $request->key)->first(),
         ]);
 
     }
@@ -81,5 +84,25 @@ class MatrixController extends Controller
     public function destroy(Matrix $matrix)
     {
         //
+    }
+
+    /**
+     * Create a new section, add section ket to matrix sections array.
+     */
+    public function updateSections(Request $request, Matrix $matrix, Section $section)
+    {
+        $key = new NanoId;
+        $key = $key->generateNanoId();
+        $section = new Section;
+        $section->user_id = $request->user()->id;
+        $section->key = $key;
+        $section->modules = [];
+        $section->save();
+
+        $matrix = Matrix::where('key', $request->key)->first();
+        $sections = $matrix->sections;
+        array_push($sections, $key);
+        $matrix->sections = $sections;
+        $matrix->save();
     }
 }

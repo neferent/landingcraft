@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\EditMatrix;
-use App\Models\Matrix;
+use App\Models\Section;
 use App\Models\User;
+use App\Models\NanoId;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
-
-class EditMatrixController extends Controller
+class SectionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request): Response
     {
-
+        return Inertia::render('Section/Index', [
+            'sections' => Section::where('user_id', $request->user()->id)->latest()->get(),
+        ]);
     }
 
     /**
@@ -35,21 +36,22 @@ class EditMatrixController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $id = new NanoId;
-        $matrix = new Matrix;
-        $matrix->user_id = $request->user()->id;
-        $matrix->key = $id->generateNanoId();
-        $matrix->name = $request->name;
-        $matrix->schema = 'default';
-        $matrix->sections = [];
-        $matrix->save();
+        $newKey = $id->generateNanoId();
+        $section = new Section;
+        $section->user_id = $request->user()->id;
+        $section->key = $newKey;
+        $section->name = $request->name;
+        $section->type = $request->type;
+        $section->modules = [];
+        $section->save();
 
-        return redirect(route('matrix.index'));
+        return redirect(route('matrix.update'));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Matrix $matrix)
+    public function show(Section $section)
     {
         //
     }
@@ -57,7 +59,7 @@ class EditMatrixController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Matrix $matrix)
+    public function edit(Section $section)
     {
         //
     }
@@ -65,7 +67,7 @@ class EditMatrixController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Matrix $matrix)
+    public function update(Request $request, Section $section)
     {
         //
     }
@@ -73,7 +75,7 @@ class EditMatrixController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Matrix $matrix)
+    public function destroy(Section $section)
     {
         //
     }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MatrixController;
+use App\Http\Controllers\SectionController;
 use App\Http\Controllers\EditMatrixController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -37,17 +38,20 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::controller(MatrixController::class)->group(function () {
+    Route::get('matrix', 'index');
+    Route::get('matrix/edit/{key}', 'editMatrix');
+    Route::post('matrix/store', 'store');
+    Route::post('matrix/section/update', 'updateSections');
+})->middleware(['auth']);
 
-Route::resource('matrix', MatrixController::class)
-    ->only(['index', 'store'])
-    ->except(['edit'])
-    ->middleware(['auth', 'verified']);
-
-Route::get('matrix/{key}', [MatrixController::class, 'edit'])->name('matrix.edit');
-
-
-
-
-
+Route::controller(SectionController::class)->group(function () {
+    Route::get('section', 'index');
+    Route::get('section/show', 'show');
+    Route::post('section/store', 'store');
+    Route::post('section/edit', 'edit');
+    Route::post('section/update', 'update');
+    Route::post('section/destroy', 'destroy');
+})->middleware(['auth']);
 
 require __DIR__.'/auth.php';
