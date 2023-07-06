@@ -86,59 +86,23 @@ class MatrixController extends Controller
         //
     }
 
+    /**
+     * Create a new section, add section ket to matrix sections array.
+     */
     public function updateSections(Request $request, Matrix $matrix, Section $section)
     {
-       // $this->authorize('update', $matrix);
-
-        // $section = new Section;
-        // $section->user_id = $request->user()->id;
-        // $section->key = $id->generateNanoId();
-        // $section->sections = [];
-        // $section->save();
-
-        // return redirect('/matrix/edit');
-
         $key = new NanoId;
         $key = $key->generateNanoId();
         $section = new Section;
         $section->user_id = $request->user()->id;
         $section->key = $key;
         $section->modules = [];
-
         $section->save();
 
-       $matrix = Matrix::where('key', $request->key)->first();
-       $sections = $matrix->sections;
-       array_push($sections, $key);
-       $matrix->sections = $sections;
-
-
-
-       $matrix->save();
-       //$matrix->name = 'newName';
-       //$matrix->save();
-
-       
-        //$matrix[0]->sections
-        //$sections = $matrix[0]->sections;
-
-        //$temp = $matrix[0]->sections;
-        //array_push($temp, 'test');
-        //$matrix[0]->sections = $temp;
-
-        
-        
-
-       //array_push($matrix[0]->sections, 'test');
-
-
-        //$matrix->update();
-
-       // $name = $m[0]->name;
-
-        //return $name;
-
-        
-// return $sections;
+        $matrix = Matrix::where('key', $request->key)->first();
+        $sections = $matrix->sections;
+        array_push($sections, $key);
+        $matrix->sections = $sections;
+        $matrix->save();
     }
 }
