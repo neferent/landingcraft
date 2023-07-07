@@ -79,4 +79,13 @@ class SectionController extends Controller
     {
         //
     }
+
+    /**
+     * Fetch Section by key
+     */
+    public function fetch(Request $request, Section $section)
+    {        
+        $section = Section::where('key', $request->key)->first();
+        return $section;
+    }
 }
