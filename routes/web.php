@@ -48,6 +48,7 @@ Route::controller(MatrixController::class)->group(function () {
 Route::controller(SectionController::class)->group(function () {
     Route::get('section', 'index');
     Route::get('section/show', 'show');
+    Route::get('section/fetch/{key}', 'fetch');
     Route::post('section/store', 'store');
     Route::post('section/edit', 'edit');
     Route::post('section/update', 'update');

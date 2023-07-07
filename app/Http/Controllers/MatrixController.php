@@ -67,8 +67,7 @@ class MatrixController extends Controller
         return Inertia::render('Matrix/Edit', [
             'matrix' => Matrix::where('key', $request->key)->first(),
         ]);
-
-    }
+}
 
     /**
      * Update the specified resource in storage.
