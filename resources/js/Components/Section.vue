@@ -4,14 +4,13 @@ import { onMounted, ref } from 'vue';
 
 const props = defineProps(['section']);
 
-const test = ref();
+const clone = ref();
 
 
 
 onMounted(() => {
-  axios.get(`/section/fetch/${props.section}`).then((r) => {
-    console.log(r.data)
-    test.value = r.data;
+  axios.get(`/section/fetch/${props.section}`).then((response) => {
+    clone.value = response.data;
   });
 });
 
@@ -20,15 +19,16 @@ onMounted(() => {
 
 <template>
   <div class="w-100 p-2 border border-green-100">
+    <div class="mb-2">
+      {{  clone}}
+
+    </div>
 
 
- <div class="mb-2">{{ test }}</div>
 
 
 
-
-
- <!-- <form @submit.prevent="newModule.post('/matrix/section/update')">
+    <!-- <form @submit.prevent="newModule.post('/matrix/section/update')">
       <InputLabel for="name" value="Name :" />
       <TextInput id="key" type="string" v-model="newModule.key" />
       <TextInput id="name" type="string" v-model="newModule.name" autofocus />
@@ -37,6 +37,4 @@ onMounted(() => {
 
 
   </div>
-
- 
 </template>

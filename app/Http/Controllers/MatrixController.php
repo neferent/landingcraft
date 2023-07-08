@@ -62,12 +62,12 @@ class MatrixController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function editMatrix(Request $request, Matrix $matrix)
+    public function edit(string $key)
     {
         return Inertia::render('Matrix/Edit', [
-            'matrix' => Matrix::where('key', $request->key)->first(),
+            'matrix' => Matrix::where('key', $key)->first(),
         ]);
-}
+    }
 
     /**
      * Update the specified resource in storage.
@@ -88,12 +88,13 @@ class MatrixController extends Controller
     /**
      * Create a new section, add section ket to matrix sections array.
      */
-    public function updateSections(Request $request, Matrix $matrix, Section $section)
+    public function updateSections(Request $request, Matrix $matrix, Section $section): RedirectResponse
     {
         $key = new NanoId;
         $key = $key->generateNanoId();
         $section = new Section;
         $section->user_id = $request->user()->id;
+        $section->name = $request->name;
         $section->key = $key;
         $section->modules = [];
         $section->save();
@@ -103,5 +104,14 @@ class MatrixController extends Controller
         array_push($sections, $key);
         $matrix->sections = $sections;
         $matrix->save();
+
+        return redirect()->route('matrix.edit', ['key' => $matrix->key]);
+
+
+
+
+
+
+
     }
 }

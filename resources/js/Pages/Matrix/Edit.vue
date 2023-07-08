@@ -1,9 +1,8 @@
 <script setup lang="ts">
 
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { useForm } from '@inertiajs/vue3';
+import { router, useForm } from '@inertiajs/vue3';
 import Section from '@/Components/Section.vue';
 import { onMounted, ref } from 'vue';
 
@@ -17,13 +16,25 @@ const props = defineProps({
 let clone = ref(props.matrix);
 
 const newSection = useForm({
-  name: '',
-  key: '',
+  name: null,
+  key: null,
 })
+
+
+
+
+async function submit() {
+  console.log('ddddd');
+  newSection.post('/matrix/section/update', { 
+    onSuccess: () => router.reload(),
+  });
+  console.log('ffff')
+
+}
 
 onMounted(() => {
 
-  newSection.key = clone.value.key;
+  newSection.key = clone.value.key
 
 })
 </script>
@@ -36,14 +47,13 @@ onMounted(() => {
 
       <Section v-for="section in clone.sections" :key="section" :section="section" />
 
-
       <br />
-      <form @submit.prevent="newSection.post('/matrix/section/update')">
-        <InputLabel for="name" value="Name :" />
-        <TextInput id="key" type="string" v-model="newSection.key" />
-        <TextInput id="name" type="string" v-model="newSection.name" autofocus />
-        <PrimaryButton class="mt-4">Add Section</PrimaryButton>
-      </form>
+
     </div>
+    <form @submit.prevent="submit">
+      <TextInput id="key" type="hidden" v-model="newSection.key" />
+      <TextInput id="name" type="string" placeholder="Name" v-model="newSection.name" autofocus />
+      <PrimaryButton class="mt-4">Add Section</PrimaryButton>
+    </form>
   </div>
 </template>
