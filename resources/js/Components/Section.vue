@@ -1,17 +1,26 @@
 <script setup>
 import axios from 'axios';
-import { onMounted, ref } from 'vue';
+import { Icon } from '@iconify/vue';
+import { onMounted, reactive, ref } from 'vue';
 
 const props = defineProps(['section']);
 
 const clone = ref();
 
+const local = reactive(clone);
 
 
-onMounted(() => {
-  axios.get(`/section/fetch/${props.section}`).then((response) => {
+
+
+
+onMounted( () => {
+ axios.get(`/section/fetch/${props.section}`).then((response) => {
     clone.value = response.data;
   });
+
+
+
+
 });
 
 
@@ -20,7 +29,14 @@ onMounted(() => {
 <template>
   <div class="w-100 p-2 border border-green-100">
     <div class="mb-2">
-      {{  clone}}
+      <div v-if="local && local.type === 'null'">aaasdasdasd</div>
+
+
+{{  local }}
+
+<Icon icon="material-symbols:add" />
+
+ 
 
     </div>
 

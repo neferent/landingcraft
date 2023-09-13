@@ -6,6 +6,7 @@ import { router, useForm } from '@inertiajs/vue3';
 import Section from '@/Components/Section.vue';
 import { onMounted, ref } from 'vue';
 
+
 const props = defineProps({
   matrix: {
     type: Object,
@@ -28,14 +29,11 @@ async function submit() {
   newSection.post('/matrix/section/update', { 
     onSuccess: () => router.reload(),
   });
-  console.log('ffff')
 
 }
 
 onMounted(() => {
-
   newSection.key = clone.value.key
-
 })
 </script>
 

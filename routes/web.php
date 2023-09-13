@@ -38,12 +38,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Route::controller(MatrixController::class)->group(function () {
-//     Route::get('matrix', 'index');
-//     Route::get('matrix/edit/{key}', 'editMatrix')->name('matrix.edit');
-//     Route::post('matrix/store', 'store');
-//     Route::post('matrix/section/update', 'updateSections');
-// })->middleware(['auth']);
+Route::controller(MatrixController::class)->group(function () {
+    Route::get('matrix', 'index');
+    Route::get('matrix/edit/{key}', 'editMatrix')->name('matrix.edit');
+    Route::post('matrix/store', 'store');
+    Route::post('matrix/section/update', 'updateSections');
+})->middleware(['auth']);
 
 
 
@@ -55,7 +55,7 @@ Route::middleware('auth')->group(function () {
 //     ->only(['index', 'edit'])
 //     ->middleware(['auth']);
 
-Route::resource('matrix', MatrixController::class);
+// Route::resource('matrix', MatrixController::class);
 
 
 
