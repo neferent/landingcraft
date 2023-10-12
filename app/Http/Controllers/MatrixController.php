@@ -86,7 +86,7 @@ class MatrixController extends Controller
     }
 
     /**
-     * Create a new section, add section ket to matrix sections array.
+     * Create a new section, add section key to matrix sections array.
      */
     public function updateSections(Request $request, Matrix $matrix, Section $section): RedirectResponse
     {

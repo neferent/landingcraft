@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MatrixController;
 use App\Http\Controllers\SectionController;
+use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\EditMatrixController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -65,8 +66,26 @@ Route::controller(SectionController::class)->group(function () {
     Route::get('section/fetch/{key}', 'fetch');
     Route::post('section/store', 'store');
     Route::post('section/edit', 'edit');
-    Route::post('section/update', 'update');
+    Route::post('section/module/update', 'updateModules');
     Route::post('section/destroy', 'destroy');
 })->middleware(['auth']);
+
+
+Route::controller(ModuleController::class)->group(function () {
+    Route::get('module', 'index');
+    Route::get('module/show', 'show');
+    Route::get('module/fetch/{key}', 'fetch');
+    Route::post('module/store', 'store');
+    Route::post('module/edit', 'edit');
+    Route::post('module/update', 'update');
+    Route::post('module/destroy', 'destroy');
+})->middleware(['auth']);
+
+
+
+
+
+
+
 
 require __DIR__.'/auth.php';

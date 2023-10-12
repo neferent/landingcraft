@@ -3,8 +3,9 @@
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { router, useForm } from '@inertiajs/vue3';
-import Section from '@/Components/Section.vue';
+import Section from '@/Pages/Section/Section.vue';
 import { onMounted, ref } from 'vue';
+import { Icon } from '@iconify/vue';
 
 
 const props = defineProps({
@@ -25,11 +26,9 @@ const newSection = useForm({
 
 
 async function submit() {
-  console.log('ddddd');
-  newSection.post('/matrix/section/update', { 
+  newSection.post('/matrix/section/update', {
     onSuccess: () => router.reload(),
   });
-
 }
 
 onMounted(() => {
@@ -38,7 +37,54 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="w-100 bg-gray-50 flex flex-col justify-center content-center items-center">
+  <div>
+    <v-container>
+      <v-sheet>
+        <v-toolbar flat>
+          <v-app-bar-nav-icon>
+            <Icon icon="material-symbols:document-scanner-outline-rounded" height="24" />
+          </v-app-bar-nav-icon>
+          <v-toolbar-title>
+            {{ clone.name }}
+          </v-toolbar-title>
+          <v-chip size="x-small">{{ clone.key }}</v-chip>
+          <v-spacer></v-spacer>
+          <v-btn icon>
+            <Icon icon="material-symbols:edit-document-outline-rounded" height="24" />
+          </v-btn>
+          <v-btn icon>
+            <Icon icon="material-symbols:manage-search-rounded" height="24" />
+          </v-btn>
+          <v-btn icon>
+            <Icon icon="material-symbols:delete-outline-rounded" height="24" />
+          </v-btn>
+          <v-btn icon>
+            <Icon icon="material-symbols:more-horiz" height="24" />
+          </v-btn>
+        </v-toolbar>
+        <v-card v-for="section in clone.sections" :key="section">
+          <Section :section="section"></Section>
+
+
+        </v-card>
+      </v-sheet>
+    </v-container>
+
+
+
+    <v-form @submit.prevent="submit">
+
+      <v-text-field v-model="newSection.name" label="name"></v-text-field>
+      <v-btn type="submit"></v-btn>
+
+    </v-form>
+  </div>
+
+
+
+
+
+  <!-- <div class="w-100 bg-gray-50 flex flex-col justify-center content-center items-center">
     <div class="font-size-xl font-bold mt-2 mb-2">{{ clone.name }}</div>
     <div class="w-10/12 bg-white border border-gray-100 drop-shadow-sm">
       <br />
@@ -53,5 +99,5 @@ onMounted(() => {
       <TextInput id="name" type="string" placeholder="Name" v-model="newSection.name" autofocus />
       <PrimaryButton class="mt-4">Add Section</PrimaryButton>
     </form>
-  </div>
+  </div> -->
 </template>

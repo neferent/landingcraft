@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Section;
 use App\Models\User;
 use App\Models\NanoId;
+use App\Models\Module;
+use App\Controllers\ModuleController;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -41,11 +43,11 @@ class SectionController extends Controller
         $section->user_id = $request->user()->id;
         $section->key = $newKey;
         $section->name = $request->name;
-        $section->type = $request->type;
+        $section->type = 'null';
         $section->modules = [];
         $section->save();
 
-        return redirect(route('matrix.update'));
+        return redirect('/matrix');
     }
 
     /**
@@ -69,7 +71,16 @@ class SectionController extends Controller
      */
     public function update(Request $request, Section $section)
     {
-        //
+        $section = Section::where('key', $request->key)->first();
+        $this->authorize('update', $section);
+                $validated = $request->validate([
+            'type' => 'string|max:32',
+        ]);
+
+       $section->update($validated);
+
+
+
     }
 
     /**
@@ -87,5 +98,36 @@ class SectionController extends Controller
     {        
         $section = Section::where('key', $request->key)->first();
         return $section;
+    }
+
+    /**
+     * Create a new module, add module key to section modules array.
+     */
+    public function updateModules(Request $request, Section $section, Module $module): RedirectResponse
+    {
+        $key = new NanoId;
+        $key = $key->generateNanoId();
+        $module = new Module;
+        $module->user_id = $request->user()->id;
+        // $module->name = $request->name;
+        $module->name = 'noName';
+        $module->key = $key;
+        $module->elements = [];
+        $module->save();
+
+        $section = Section::where('key', $request->key)->first();
+        $modules = $section->modules;
+        array_push($modules, $key);
+        $section->modules = $modules;
+        $section->save();
+
+        return redirect()->route('section.edit', ['key' => $section->key]);
+
+
+
+
+
+
+
     }
 }
