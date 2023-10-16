@@ -33,9 +33,9 @@ class MatrixController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Creates and stores a new section
      */
-    public function store(Request $request): RedirectResponse
+    public function newMatrix(Request $request): RedirectResponse
     {
         $id = new NanoId;
         $matrix = new Matrix;
@@ -88,7 +88,7 @@ class MatrixController extends Controller
     /**
      * Create a new section, add section key to matrix sections array.
      */
-    public function updateSections(Request $request, Matrix $matrix, Section $section): RedirectResponse
+    public function newSection(Request $request, Matrix $matrix, Section $section): RedirectResponse
     {
         $key = new NanoId;
         $key = $key->generateNanoId();

@@ -2,11 +2,12 @@
 import axios from 'axios';
 import { Icon } from '@iconify/vue';
 import { router, useForm } from '@inertiajs/vue3';
+import Module from '@/Pages/Module/Module.vue';
 
 
 import { onMounted, reactive, ref } from 'vue';
 
-const props = defineProps(['section']);
+const props = defineProps(['section', 'parentKey', 'matrixKey']);
 
 const clone = ref();
 
@@ -15,19 +16,18 @@ const local = reactive(clone);
 const newModule = useForm({
   name: null,
   key: null,
+  parentKey: null,
+  matrixKey: null,
+  type: null,
 })
 
 
-function registerSectionType(type) {
 
-  axios.post(`/section/update/${props.section}`, {type}).then((response) => {
-    console.log(response)
-  })
-
-}
-
-async function submit() {
-  newModule.post('/section/module/update', {
+async function registerSection(type) {
+  newModule.type = type;
+  newModule.parentKey = props.parentKey;
+  newModule.matrixKey = props.matrixKey;
+  newModule.post('/section/module/register', {
     onSuccess: () => router.reload(),
   });
 }
@@ -35,10 +35,14 @@ async function submit() {
 
 
 
-onMounted(() => {
-  axios.get(`/section/fetch/${props.section}`).then((response) => {
+onMounted(async() => {
+  await axios.get(`/section/fetch/${props.section}`).then((response) => {
     clone.value = response.data;
   });
+  newModule.key = clone.value.key
+  newModule.parentKey = props.parentKey;
+  newModule.matrixKey = props.matrixKey;
+  console.log('section.vue', props.matrixKey)
 });
 
 </script>
@@ -67,7 +71,7 @@ onMounted(() => {
       <v-container v-if="local.type === 'null'">
        
         <div class="d-flex justify-center gap-2">
-          <v-btn stacked variant="tonal" @click="submit">
+          <v-btn stacked variant="tonal" @click="registerSection('sideBySide')">
             <div class="d-flex justify-center mb-1">
               <Icon icon="material-symbols:image-outline" height="18" />
               <Icon icon="material-symbols:format-align-left-rounded" height="18" />
@@ -79,7 +83,7 @@ onMounted(() => {
             Side by side
           </v-btn>
 
-          <v-btn stacked variant="tonal">
+          <v-btn stacked variant="tonal" @click="registerSection('singleColumn')">
             <div class="d-flex justify-center mb-1">
               <Icon icon="material-symbols:image-outline" height="18" />
             </div>
@@ -89,7 +93,7 @@ onMounted(() => {
             Single Column
           </v-btn>
 
-           </div>
+        </div>
       
 
 
@@ -97,9 +101,10 @@ onMounted(() => {
 
       </v-container>
       <v-container v-else>
-        {{ local }}
+        <template v-for="module in local.modules">
+        <Module :module="module" :matrix-key="newModule.matrixKey" /></template>
       </v-container>
-      <v-container>{{ local }}</v-container>
+
 
     </v-card>
 

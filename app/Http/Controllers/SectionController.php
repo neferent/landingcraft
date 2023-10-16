@@ -35,7 +35,7 @@ class SectionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function newSection(Request $request): RedirectResponse
     {
         $id = new NanoId;
         $newKey = $id->generateNanoId();
@@ -100,34 +100,38 @@ class SectionController extends Controller
         return $section;
     }
 
-    /**
-     * Create a new module, add module key to section modules array.
-     */
-    public function updateModules(Request $request, Section $section, Module $module): RedirectResponse
+    public function createModule(Request $request)
     {
         $key = new NanoId;
         $key = $key->generateNanoId();
         $module = new Module;
         $module->user_id = $request->user()->id;
-        // $module->name = $request->name;
-        $module->name = 'noName';
+        $module->name = 'noNameTest';
         $module->key = $key;
         $module->elements = [];
         $module->save();
+        return $module;
+    }
+
+    /**
+     * Register a new section, create required modules
+     */
+    public function registerSection(Request $request, Section $section, Module $module): RedirectResponse
+    {
+        $sideBySide = $request->type === 'sideBySide';
+        
+        $newModule = $this->createModule($request);
+        if($sideBySide) $newModule2 = $this->createModule($request);
 
         $section = Section::where('key', $request->key)->first();
         $modules = $section->modules;
-        array_push($modules, $key);
+        array_push($modules, $newModule->key);
+        if($sideBySide) array_push($modules, $newModule2->key);
         $section->modules = $modules;
-        $section->save();
+        $section->type = $request->type;
+        $section->save();        
 
-        return redirect()->route('section.edit', ['key' => $section->key]);
-
-
-
-
-
-
+        return redirect()->route('matrix.edit', ['key' => $request->parentKey]);
 
     }
 }

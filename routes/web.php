@@ -3,6 +3,7 @@
 use App\Http\Controllers\MatrixController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\ElementController;
 use App\Http\Controllers\EditMatrixController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -42,31 +43,19 @@ Route::middleware('auth')->group(function () {
 Route::controller(MatrixController::class)->group(function () {
     Route::get('matrix', 'index');
     Route::get('matrix/edit/{key}', 'editMatrix')->name('matrix.edit');
-    Route::post('matrix/store', 'store');
-    Route::post('matrix/section/update', 'updateSections');
+    Route::post('matrix/new', 'newMatrix');
+    Route::post('matrix/section/register', 'registerSection');
+    Route::post('matrix/edit/section/new', 'newSection');
 })->middleware(['auth']);
-
-
-
-
-//Route::get('matrix', [MatrixController::class], 'index')->name('matrix.index');
-//Route::get('matrix/edit/{key}', [MatrixController::class], 'edit')->name('matrix.edit');
-
-// Route::resource('matrix', MatrixController::class)
-//     ->only(['index', 'edit'])
-//     ->middleware(['auth']);
-
-// Route::resource('matrix', MatrixController::class);
-
 
 
 Route::controller(SectionController::class)->group(function () {
     Route::get('section', 'index');
     Route::get('section/show', 'show');
     Route::get('section/fetch/{key}', 'fetch');
-    Route::post('section/store', 'store');
+    Route::post('section/new', 'newSection');
     Route::post('section/edit', 'edit');
-    Route::post('section/module/update', 'updateModules');
+    Route::post('section/module/register', 'registerSection');
     Route::post('section/destroy', 'destroy');
 })->middleware(['auth']);
 
@@ -79,6 +68,10 @@ Route::controller(ModuleController::class)->group(function () {
     Route::post('module/edit', 'edit');
     Route::post('module/update', 'update');
     Route::post('module/destroy', 'destroy');
+})->middleware(['auth']);
+
+Route::controller(ElementController::class)->group(function () {
+    Route::post('element/create', 'registerParagraphElement');
 })->middleware(['auth']);
 
 

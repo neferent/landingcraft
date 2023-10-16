@@ -10,7 +10,6 @@ const newMatrix = useForm({
 
 function edit(key) {
   window.location.href = `matrix/edit/${key}`;
-  console.log('edit', key)
 }
 
 </script>
@@ -48,7 +47,7 @@ function edit(key) {
 
 
 
-<v-form @submit.prevent="newMatrix.post('/matrix/store')">
+<v-form @submit.prevent="newMatrix.post('/matrix/new')">
 
   <v-text-field v-model="newMatrix.name" label="name"></v-text-field>
   <v-btn type="submit"></v-btn>

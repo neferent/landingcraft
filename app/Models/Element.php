@@ -8,4 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class Element extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'key',
+        'name',
+        'type',
+        'properties',
+    ];
+
+    protected $casts = [
+        'properties' => 'array',
+    ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

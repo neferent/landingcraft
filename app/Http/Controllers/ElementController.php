@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Element;
+use App\Models\Module;
+use App\Models\User;
+use App\Models\NanoId;
 use Illuminate\Http\Request;
 
 class ElementController extends Controller
@@ -61,5 +64,44 @@ class ElementController extends Controller
     public function destroy(Element $element)
     {
         //
+    }
+
+    public function createElement(Request $request)
+    {
+        $key = new NanoId;
+        $key = $key->generateNanoId();
+        $element = new Element;
+        $element->user_id = $request->user()->id;
+        $element->name = 'noNameTest';
+        $element->key = $key;
+        $element->properties = [];
+        $element->save();
+        return $element;
+    }
+
+    public function registerParagraphElement(Request $request, Module $module, Element $element)
+    {
+        $newElement = $this->createElement($request);
+
+        $module = Module::where('key', $request->parentKey)->first();
+        $elements = $module->elements;
+        array_push($elements, $newElement->key);
+        $module->elements = $elements;
+        $module->type = 'paragraph';
+        $module->save();
+
+        return redirect()->route('matrix.edit', ['key' => $request->matrixKey]);
+        
+    }
+
+    
+    
+    /**
+     * Fetch Element by key
+     */
+    public function fetch(Request $request, Element $element)
+    {        
+        $element = Element::where('key', $request->key)->first();
+        return $element;
     }
 }

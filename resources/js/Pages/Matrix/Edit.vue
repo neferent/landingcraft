@@ -25,8 +25,8 @@ const newSection = useForm({
 
 
 
-async function submit() {
-  newSection.post('/matrix/section/update', {
+async function createNewSection() {
+  newSection.post('section/new', {
     onSuccess: () => router.reload(),
   });
 }
@@ -34,6 +34,7 @@ async function submit() {
 onMounted(() => {
   newSection.key = clone.value.key
 })
+
 </script>
 
 <template>
@@ -63,7 +64,7 @@ onMounted(() => {
           </v-btn>
         </v-toolbar>
         <v-card v-for="section in clone.sections" :key="section">
-          <Section :section="section"></Section>
+          <Section :section="section" :parent-key="props.matrix.key" :matrix-key="props.matrix.key"></Section>
 
 
         </v-card>
@@ -72,7 +73,7 @@ onMounted(() => {
 
 
 
-    <v-form @submit.prevent="submit">
+    <v-form @submit.prevent="createNewSection">
 
       <v-text-field v-model="newSection.name" label="name"></v-text-field>
       <v-btn type="submit"></v-btn>
