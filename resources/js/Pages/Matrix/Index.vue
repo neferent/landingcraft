@@ -1,4 +1,5 @@
 <script setup>
+import axios from 'axios';
 import { useForm } from '@inertiajs/vue3';
 import { Icon } from '@iconify/vue';
 
@@ -8,8 +9,26 @@ const newMatrix = useForm({
   name: '',
 })
 
+let newPageCreated = false;
+
 function edit(key) {
   window.location.href = `matrix/edit/${key}`;
+}
+
+function createMatrix() {
+  newPageCreated = true
+  newMatrix.post('/matrix/new')
+  setTimeout(() => {
+    newPageCreated = false
+  }, 5000);
+}
+
+async function deleteMatrix(key) {
+  await axios.delete(`/matrix/delete/${key}`).then((response) => {
+    console.log(key, 'deleted');
+  })
+
+
 }
 
 </script>
@@ -33,7 +52,7 @@ function edit(key) {
             <v-btn icon>
               <Icon icon="material-symbols:manage-search-rounded" height="24" />
             </v-btn>
-            <v-btn icon>
+            <v-btn icon @click="deleteMatrix(matrix.key)">
               <Icon icon="material-symbols:delete-outline-rounded" height="24" />
             </v-btn>
             <v-btn icon>
@@ -45,24 +64,19 @@ function edit(key) {
     </v-row>
   </v-container>
 
+  <v-container>
+    <v-card width="400" class="mx-auto">
+      <template v-slot:title>Create a new page</template>
+      <template v-slot:text>
+        <v-form>
+          <v-text-field v-model="newMatrix.name" label="Name of page"></v-text-field>
+          <v-btn @click="createMatrix">Create</v-btn>
+        </v-form>
+      </template>
+    </v-card>
+  </v-container>
 
-
-<v-form @submit.prevent="newMatrix.post('/matrix/new')">
-
-  <v-text-field v-model="newMatrix.name" label="name"></v-text-field>
-  <v-btn type="submit"></v-btn>
-
-</v-form>
-<!--  
-  <div class="w-100 bg-gray-50 flex flex-col justify-center">
-
-    <form>
-
-      <InputLabel for="name" value="Name :" />
-      <TextInput id="name" type="string" v-model="newMatrix.name" required autofocus />
-      <PrimaryButton class="mt-4">Create Matrix</PrimaryButton>
-
-    </form>
-  </div> -->
-  
-  </template>
+  <v-snackbar v-model="newPageCreated">
+  New Page: <b>{{ newMatrix.name }}</b> created.
+  </v-snackbar>
+</template>

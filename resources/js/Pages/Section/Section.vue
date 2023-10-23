@@ -13,7 +13,7 @@ const clone = ref();
 
 const local = reactive(clone);
 
-const newModule = useForm({
+const section = useForm({
   name: null,
   key: null,
   parentKey: null,
@@ -23,11 +23,13 @@ const newModule = useForm({
 
 
 
+
+
 async function registerSection(type) {
-  newModule.type = type;
-  newModule.parentKey = props.parentKey;
-  newModule.matrixKey = props.matrixKey;
-  newModule.post('/section/module/register', {
+  section.type = type;
+  section.parentKey = props.parentKey;
+  section.matrixKey = props.matrixKey;
+  section.post('/section/module/register', {
     onSuccess: () => router.reload(),
   });
 }
@@ -39,10 +41,13 @@ onMounted(async() => {
   await axios.get(`/section/fetch/${props.section}`).then((response) => {
     clone.value = response.data;
   });
-  newModule.key = clone.value.key
-  newModule.parentKey = props.parentKey;
-  newModule.matrixKey = props.matrixKey;
+  section.key = clone.value.key
+  section.parentKey = props.parentKey;
+  section.matrixKey = props.matrixKey;
+  section.type = clone.value.type;
   console.log('section.vue', props.matrixKey)
+  console.log('FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF', clone.value);
+
 });
 
 </script>
@@ -67,42 +72,36 @@ onMounted(async() => {
           <Icon icon="material-symbols:more-horiz" height="24" />
         </v-btn>
       </v-toolbar>
+      {{ section.type }}
 
-      <v-container v-if="local.type === 'null'">
-       
-        <div class="d-flex justify-center gap-2">
+      <v-container v-if="section.type === 'null'">
+        <div>Type Undefined: Choose section type.</div>       
+        <div class="flex justify-center gap-2">
           <v-btn stacked variant="tonal" @click="registerSection('sideBySide')">
-            <div class="d-flex justify-center mb-1">
-              <Icon icon="material-symbols:image-outline" height="18" />
-              <Icon icon="material-symbols:format-align-left-rounded" height="18" />
-            </div>
-            <div class="d-flex justify-center mb-2">
-              <Icon icon="material-symbols:format-align-right-rounded" height="18" />
-              <Icon icon="material-symbols:image-outline" height="18" />
-            </div>
             Side by side
           </v-btn>
-
           <v-btn stacked variant="tonal" @click="registerSection('singleColumn')">
-            <div class="d-flex justify-center mb-1">
-              <Icon icon="material-symbols:image-outline" height="18" />
-            </div>
-            <div class="d-flex justify-center mb-2">
-              <Icon icon="material-symbols:format-align-center-rounded" height="18" />
-            </div>
             Single Column
           </v-btn>
-
         </div>
-      
+      </v-container>
 
-
-
+      <v-container v-if="section.type === 'sideBySide'">
+        <div>{{ section.type }}</div>
+        <div class="flex flex-row">
+        <template v-for="module in local.modules">
+        <Module :module="module" :matrix-key="section.matrixKey" />
+        </template>
+        </div>
 
       </v-container>
+
+
       <v-container v-else>
+
         <template v-for="module in local.modules">
-        <Module :module="module" :matrix-key="newModule.matrixKey" /></template>
+        <Module :module="module" :matrix-key="section.matrixKey" />
+        </template>
       </v-container>
 
 
@@ -151,10 +150,10 @@ onMounted(async() => {
 
 
 
-  <!-- <form @submit.prevent="newModule.post('/matrix/section/update')">
+  <!-- <form @submit.prevent="section.post('/matrix/section/update')">
       <InputLabel for="name" value="Name :" />
-      <TextInput id="key" type="string" v-model="newModule.key" />
-      <TextInput id="name" type="string" v-model="newModule.name" autofocus />
+      <TextInput id="key" type="string" v-model="section.key" />
+      <TextInput id="name" type="string" v-model="section.name" autofocus />
       <PrimaryButton class="mt-4">Add Module</PrimaryButton>
     </form> -->
 

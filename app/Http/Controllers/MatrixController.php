@@ -80,9 +80,12 @@ class MatrixController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Matrix $matrix)
+    public function destroy(Request $request, Matrix $matrix)
     {
-        //
+        $matrix = Matrix::where('key', $request->key)->first();
+        $this->authorize('delete', $matrix);
+        $matrix->delete();
+       // return redirect()->route('matrix.index');
     }
 
     /**

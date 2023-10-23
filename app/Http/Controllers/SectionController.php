@@ -106,7 +106,7 @@ class SectionController extends Controller
         $key = $key->generateNanoId();
         $module = new Module;
         $module->user_id = $request->user()->id;
-        $module->name = 'noNameTest';
+        $module->name = 'Module';
         $module->key = $key;
         $module->elements = [];
         $module->save();
@@ -118,11 +118,9 @@ class SectionController extends Controller
      */
     public function registerSection(Request $request, Section $section, Module $module): RedirectResponse
     {
-        $sideBySide = $request->type === 'sideBySide';
-        
+        $sideBySide = $request->type === 'sideBySide';        
         $newModule = $this->createModule($request);
         if($sideBySide) $newModule2 = $this->createModule($request);
-
         $section = Section::where('key', $request->key)->first();
         $modules = $section->modules;
         array_push($modules, $newModule->key);
@@ -130,8 +128,6 @@ class SectionController extends Controller
         $section->modules = $modules;
         $section->type = $request->type;
         $section->save();        
-
         return redirect()->route('matrix.edit', ['key' => $request->parentKey]);
-
     }
 }

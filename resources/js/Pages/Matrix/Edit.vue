@@ -25,7 +25,7 @@ const newSection = useForm({
 
 
 
-async function createNewSection() {
+async function createSection() {
   newSection.post('section/new', {
     onSuccess: () => router.reload(),
   });
@@ -70,15 +70,26 @@ onMounted(() => {
         </v-card>
       </v-sheet>
     </v-container>
+    <v-container>
+    <v-card width="400" class="mx-auto">
+      <template v-slot:title>Add a section</template>
+      <template v-slot:text>
+        <v-form>
+          <v-text-field v-model="newSection.name" label="Name of page"></v-text-field>
+          <v-btn @click="createSection">Add</v-btn>
+        </v-form>
+      </template>
+    </v-card>
+  </v-container>
 
 
-
+<!-- 
     <v-form @submit.prevent="createNewSection">
 
       <v-text-field v-model="newSection.name" label="name"></v-text-field>
       <v-btn type="submit"></v-btn>
 
-    </v-form>
+    </v-form> -->
   </div>
 
 
