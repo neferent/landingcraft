@@ -43,6 +43,9 @@ Route::middleware('auth')->group(function () {
 Route::controller(MatrixController::class)->group(function () {
     Route::get('matrix', 'index');
     Route::get('matrix/edit/{key}', 'editMatrix')->name('matrix.edit');
+    Route::get('matrix/fetch/{key}', 'fetchMatrix');
+    Route::get('matrix/all', 'fetchAllMatrices');
+    Route::post('matrix/update/{key}', 'updateMatrix');
     Route::post('matrix/new', 'newMatrix');
     Route::post('matrix/section/register', 'registerSection');
     Route::post('matrix/edit/section/new', 'newSection');
@@ -54,7 +57,7 @@ Route::controller(SectionController::class)->group(function () {
     Route::get('section', 'index');
     Route::get('section/show', 'show');
     Route::get('section/fetch/{key}', 'fetch');
-    Route::post('section/new', 'newSection');
+    Route::post('section/create', 'createSection');
     Route::post('section/edit', 'edit');
     Route::post('section/module/register', 'registerSection');
     Route::post('section/destroy', 'destroy');

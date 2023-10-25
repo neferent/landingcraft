@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Matrix;
 use App\Models\Section;
 use App\Models\User;
 use App\Models\NanoId;
@@ -33,24 +34,6 @@ class SectionController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function newSection(Request $request): RedirectResponse
-    {
-        $id = new NanoId;
-        $newKey = $id->generateNanoId();
-        $section = new Section;
-        $section->user_id = $request->user()->id;
-        $section->key = $newKey;
-        $section->name = $request->name;
-        $section->type = 'null';
-        $section->modules = [];
-        $section->save();
-
-        return redirect('/matrix');
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show(Section $section)
@@ -79,7 +62,29 @@ class SectionController extends Controller
 
        $section->update($validated);
 
+    }
 
+    /**
+     * Create a new section, add section key to matrix sections array.
+     */
+    public function createSection(Request $request, Matrix $matrix, Section $section)
+    {
+        $key = new NanoId;
+        $key = $key->generateNanoId();
+        $section = new Section;
+        $section->user_id = $request->user()->id;
+        $section->name = $request->name;
+        $section->key = $key;
+        $section->modules = [];
+        $section->save();
+
+        $matrix = Matrix::where('key', $request->key)->first();
+        $sections = $matrix->sections;
+        array_push($sections, $key);
+        $matrix->sections = $sections;
+        $matrix->save();
+
+        //return redirect()->route('matrix.edit', ['key' => $matrix->key]);
 
     }
 

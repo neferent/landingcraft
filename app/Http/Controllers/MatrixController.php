@@ -72,7 +72,7 @@ class MatrixController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Matrix $matrix)
+    public function updateMatrix(Request $request, Matrix $matrix)
     {
         //
     }
@@ -88,33 +88,22 @@ class MatrixController extends Controller
        // return redirect()->route('matrix.index');
     }
 
-    /**
-     * Create a new section, add section key to matrix sections array.
+    /** 
+     * Fetch matrix based on key.
      */
-    public function newSection(Request $request, Matrix $matrix, Section $section): RedirectResponse
+    public function fetchMatrix(Request $request, Matrix $matrix) 
     {
-        $key = new NanoId;
-        $key = $key->generateNanoId();
-        $section = new Section;
-        $section->user_id = $request->user()->id;
-        $section->name = $request->name;
-        $section->key = $key;
-        $section->modules = [];
-        $section->save();
-
         $matrix = Matrix::where('key', $request->key)->first();
-        $sections = $matrix->sections;
-        array_push($sections, $key);
-        $matrix->sections = $sections;
-        $matrix->save();
 
-        return redirect()->route('matrix.edit', ['key' => $matrix->key]);
+        return $matrix;
+    }
 
-
-
-
-
-
-
+    /**
+     * Fetch all matrices of a user
+     */
+    public function fetchAllMatrices(Request $request, Matrix $matrix)
+    {
+        $matrices = Matrix::where('user_id', $request->user()->id)->latest()->get();
+        return $matrices;
     }
 }

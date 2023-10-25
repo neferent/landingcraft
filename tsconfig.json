@@ -12,7 +12,9 @@
         "noEmit": true,
         "skipLibCheck": true,
         "paths": {
-            "@/*": ["./resources/js/*"]
+            "@/*": ["./resources/js/*"],
+            "@store/*": ["./resources/js/stores"],
+            "@api/*": ["./resources/js/api"],
         }
     },
     "include": ["resources/js/**/*.ts", "resources/js/**/*.d.ts", "resources/js/**/*.vue"]
