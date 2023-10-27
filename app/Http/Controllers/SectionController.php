@@ -76,6 +76,7 @@ class SectionController extends Controller
         $section->name = $request->name;
         $section->key = $key;
         $section->modules = [];
+        $section->options = [];
         $section->save();
 
         $matrix = Matrix::where('key', $request->key)->first();
@@ -83,9 +84,6 @@ class SectionController extends Controller
         array_push($sections, $key);
         $matrix->sections = $sections;
         $matrix->save();
-
-        //return redirect()->route('matrix.edit', ['key' => $matrix->key]);
-
     }
 
     /**
@@ -121,7 +119,7 @@ class SectionController extends Controller
     /**
      * Register a new section, create required modules
      */
-    public function registerSection(Request $request, Section $section, Module $module): RedirectResponse
+    public function registerSection(Request $request, Section $section, Module $module)
     {
         $sideBySide = $request->type === 'sideBySide';        
         $newModule = $this->createModule($request);
@@ -133,6 +131,5 @@ class SectionController extends Controller
         $section->modules = $modules;
         $section->type = $request->type;
         $section->save();        
-        return redirect()->route('matrix.edit', ['key' => $request->parentKey]);
     }
 }

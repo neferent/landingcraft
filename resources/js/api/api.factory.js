@@ -13,6 +13,7 @@ export default function(baseUri = '') {
           })
           .catch((error) => {
             reject(error.response);
+            console.error('[ERROR]', error);
           });
       });
     },

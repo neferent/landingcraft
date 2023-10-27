@@ -29,10 +29,9 @@ import EditMatrix from '@/Pages/EditMatrix/Index.vue';
 
 
 <template>
-
   <EditMatrix :matrices="matrices" />
 
-<!-- 
+  <!-- 
 
 <v-layout>
   <v-app-bar>
@@ -62,7 +61,7 @@ import EditMatrix from '@/Pages/EditMatrix/Index.vue';
 
 
 
-<!-- 
+  <!-- 
 
 
   <v-layout class="rounded rounded-md">

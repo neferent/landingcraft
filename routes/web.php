@@ -59,7 +59,7 @@ Route::controller(SectionController::class)->group(function () {
     Route::get('section/fetch/{key}', 'fetch');
     Route::post('section/create', 'createSection');
     Route::post('section/edit', 'edit');
-    Route::post('section/module/register', 'registerSection');
+    Route::post('section/register', 'registerSection');
     Route::post('section/destroy', 'destroy');
 })->middleware(['auth']);
 

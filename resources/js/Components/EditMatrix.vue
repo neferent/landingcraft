@@ -1,78 +1,28 @@
 <script setup>
-import axios from 'axios';
-import { useForm } from '@inertiajs/vue3';
-import Section from '@/Pages/Section/Section.vue';
-import { computed, onMounted, ref, watch } from 'vue';
-
-
-
-
+import Section from '@/Components/Section.vue';
+import { ref, watch } from 'vue';
+import { storeToRefs } from 'pinia';
 import EditMatrixHead from './EditMatrixHead.vue';
-
-
-import { usePage } from '@inertiajs/vue3'
-
 import { useMatrixStore } from '@store/matrix'
 
-const page = usePage()
-const currentMatrix = computed(() => page.props.matrix)
 
 const store = useMatrixStore()
-const props = defineProps({
-  matrix: {
-    type: String,
-  },
-})
+defineProps(['loading'])
 
-let loadingMatrix = ref(false)
-
-
-
-let clone = ref();
+const loadingMatrix = ref(false)
+const { matrix } = storeToRefs(store)
 
 
 
 
-const newSection = useForm({
+const newSection = {
   name: 'Unnamed section',
   key: null,
-})
-
-watch(() => props.matrix, (newMatrix, oldMatrix) => {
-  console.log('watcher triggered', newMatrix, oldMatrix)
-  loadMatrix(newMatrix);
-})
-
-async function loadMatrix(key) {
-  loadingMatrix.value = true
-  await store.fetchMatrix(key);
-  clone.value = store.matrix
-  
-
-
-
-
-  loadingMatrix.value = false
-  newSection.key = clone.value.key
-  console.log('usePage', page.props);
-
 }
-
-async function updateMatrixName(name) {
-
-}
-
-
-// async function createSection() {
-//   axios.post('/section/new', { newSection });
-// }
-
-
 
 async function createSection() {
-  newSection.post('section/create', {
-    onSuccess: () => console.log('success'),
-  });
+  newSection.key = store.matrix.data.key
+  await store.makeEmptySection(newSection)
 }
 
 
@@ -81,33 +31,17 @@ async function createSection() {
 
 <template>
   <div>
-  <v-container>
-    <div v-if="clone">
-      <EditMatrixHead :matrix="clone" />
-      <v-card v-for="section in clone.sections" :key="section">
-          <Section :section="section" :parent-key="props.matrix.key" :matrix-key="props.matrix.key"></Section>
-
-
-        </v-card>
-        {{ clone }}
-        <v-card width="400" class="mx-auto">
-      <template v-slot:title>Add a section</template>
-      <template v-slot:text>
-        <v-form>
-          <v-text-field v-model="newSection.name" label="Name of page"></v-text-field>
-          <v-btn @click="createSection">Add</v-btn>
-        </v-form>
-      </template>
-    </v-card> 
-
-
-
-
-    </div>
-    <div v-else-if="!clone && loadingMatrix">loading...</div>
-    <v-alert v-else type="info" icon="$info" title="No matrix selected"
-      text="Please select a matrix from the list on the left."></v-alert>
-  </v-container>
+    <v-container>
+      <div v-if="matrix.data">
+        <EditMatrixHead />
+        <div v-for="section in matrix.data.sections" :key="section.key">{{ section }}</div>
+        <Section v-for="section in matrix.data.sections" :sectionKey="section" :key="section" />
+        <div @click="createSection">CREATE SECTION BUTTON LOL</div> 
+      </div>
+      <div v-else-if="!clone && loading">loading...</div>
+      <v-alert v-else type="info" icon="$info" title="No matrix selected"
+        text="Please select a matrix from the list on the left."></v-alert>
+    </v-container>
 
   </div>
 

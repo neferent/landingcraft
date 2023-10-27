@@ -15,10 +15,12 @@ class Section extends Model
         'name',
         'type',
         'modules',
+        'options',
     ];
 
     protected $casts = [
         'modules' => 'array',
+        'options' => 'array',
     ];
 
     public function user(): BelongsTo

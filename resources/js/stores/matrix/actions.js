@@ -1,20 +1,22 @@
-import apiBase from '@api/api.base'
+import matrixAPI from '@api/matrix.api';
 
 export default {
-  async fetchMatrices() {
-    try {
-      this.matrices = await apiBase.get('/matrix/all');
-    } catch (error) {
-      console.error('[ERROR]', error);
-      return error;
-    }
+  async fetchMatrices() { 
+    this.matrices = await matrixAPI.fetchMatrices(); 
   },
-
   async fetchMatrix(key) {
-    try {
-      this.matrix = await apiBase.get(`/matrix/fetch/${key}`);
-    } catch (error) {
-      console.error('[ERROR]', error)
-    }
+    this.matrix = await matrixAPI.fetchMatrix(key);
   },
-}
+  async makeEmptySection(data) {
+    await matrixAPI.makeEmptySection(data);
+    this.fetchMatrix(data.key);
+  },
+  async fetchSection(key) {
+    const section = matrixAPI.fetchSection(key);
+    return section;    
+  },
+  async registerSection(data) {
+    await matrixAPI.registerSection(data);
+  }
+};
+
