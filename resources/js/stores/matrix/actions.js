@@ -17,6 +17,13 @@ export default {
   },
   async registerSection(data) {
     await matrixAPI.registerSection(data);
+  },
+  async fetchModule(key) {
+    const module = matrixAPI.fetchModule(key);
+    return module;
+  },
+  async createModule(data) {
+    await matrixAPI.createModule(data);
   }
 };
 

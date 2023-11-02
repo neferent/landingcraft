@@ -29,7 +29,28 @@ import EditMatrix from '@/Pages/EditMatrix/Index.vue';
 
 
 <template>
-  <EditMatrix :matrices="matrices" />
+
+<div class="w-full">
+    <div class="flex flex-row justify-between items-center w-full px-12 py-4 bg-gray-100">
+      <div>LandingCraft</div>
+      <div>
+        <div class="w-8 h-8 rounded-full bg-gray-500"></div>
+      </div>
+    </div>
+    <div class="flex flex-row justify-around items-center w-full h-28 px-12 py-4 bg-gray-500">
+      <div>Contextual Menu</div>
+    </div>
+    <div class="flex flex-row justify-around items-center w-full px-12 py-4 bg-gray-50">
+      <!-- <MatrixNavDrawer > </MatrixNavDrawer> -->
+      <!-- <EditMatrix v-else :loading="matrixLoading"/> -->
+
+    </div>
+
+
+
+
+
+  </div>
 
   <!-- 
 

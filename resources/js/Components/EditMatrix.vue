@@ -5,6 +5,8 @@ import { storeToRefs } from 'pinia';
 import EditMatrixHead from './EditMatrixHead.vue';
 import { useMatrixStore } from '@store/matrix'
 
+import CreateSectionButton from './CreateSectionButton.vue';
+
 
 const store = useMatrixStore()
 defineProps(['loading'])
@@ -31,17 +33,18 @@ async function createSection() {
 
 <template>
   <div>
-    <v-container>
+    <div>
       <div v-if="matrix.data">
         <EditMatrixHead />
         <div v-for="section in matrix.data.sections" :key="section.key">{{ section }}</div>
         <Section v-for="section in matrix.data.sections" :sectionKey="section" :key="section" />
-        <div @click="createSection">CREATE SECTION BUTTON LOL</div> 
+        <CreateSectionButton @click="createSection" />
+
       </div>
       <div v-else-if="!clone && loading">loading...</div>
       <v-alert v-else type="info" icon="$info" title="No matrix selected"
         text="Please select a matrix from the list on the left."></v-alert>
-    </v-container>
+    </div>
 
   </div>
 

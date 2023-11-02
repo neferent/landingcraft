@@ -76,6 +76,12 @@ class SectionController extends Controller
         $section->name = $request->name;
         $section->key = $key;
         $section->modules = [];
+
+        $module = $this->createModule($request);
+        $modules = $section->modules;
+        array_push($modules, $module->key);
+        $section->modules = $modules;
+
         $section->options = [];
         $section->save();
 

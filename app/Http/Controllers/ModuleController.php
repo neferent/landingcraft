@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Section;
 use App\Models\Module;
 use App\Models\User;
 use App\Models\NanoId;
@@ -25,9 +26,33 @@ class ModuleController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function createModule(Request $request)
     {
-        //
+        $key = new NanoId;
+        $key = $key->generateNanoId();
+        $module = new Module;
+        $module->user_id = $request->user()->id;
+        $module->name = 'none for now';
+        $module->key = $key;
+        $module->elements = [];
+        $module->save();
+        return $module;
+    }
+
+    /**
+     * 
+     */
+    public function create(Request $request, Section $section, Module $module)
+    {
+        $module = $this->createModule($request);
+        $section = Section::where('key', $request->key)->first();
+
+        $modules = $section->modules;
+        array_push($modules, $module->key);
+        $section->modules = $modules;
+        $section->save();
+
+
     }
 
     /**

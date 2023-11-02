@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia';
+import { defineStore } from 'pinia'
 import actions from './actions'
 
 export const useMatrixStore = defineStore('matrix', {

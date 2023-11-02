@@ -4,22 +4,14 @@
       loading...
     </div>
     <div v-else>
-      <div v-if="sectionData.type === 'null'">
-        <v-card>
-          <div>Type Undefined: Choose section type.</div>       
-        <div class="flex justify-center gap-2">
-          <v-btn stacked variant="tonal" @click="registerSection('sideBySide')">
-            Side by side
-          </v-btn>
-          <v-btn stacked variant="tonal" @click="registerSection('singleColumn')">
-            Single Column
-          </v-btn>
+      {{ sectionData }}
+      <div class="w-full h-auto border border-blue-200 rounded p-4 mb-12">
+        <div class="flex flex-row gap-2">
+          <div v-for="module in sectionData.modules" :key="module.key" class="flex-grow border border-red-400 rounded p-4 mb-12">
+            <Module :module-key="module" />
+          </div>
+          <div class="flex-grow-0 border border-red-400 rounded p-4 mb-12"> <CreateModuleButton @click="createModule" /></div>
         </div>
-
-        </v-card>
-      </div>
-      <div v-else>
-        Not null
       </div>
     </div>
   </div>
@@ -27,8 +19,9 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useForm } from '@inertiajs/vue3'
 import { useMatrixStore } from '@store/matrix'
+import Module from './Module.vue';
+import CreateModuleButton from './CreateModuleButton.vue';
 
 const props = defineProps({
   sectionKey: {
@@ -39,25 +32,28 @@ const props = defineProps({
 const store = useMatrixStore()
 const sectionData = ref();
 
-const section = useForm({
-  name: null,
+const newModule = {
+  name: 'Unnamed module',
   key: null,
-  matrix: null,
-  type: null,
-})
-
-async function registerSection(type) {
-  section.type = type
-  section.key = sectionData.value.key
-  section.matrix = store.matrix.data.key
-  await store.registerSection(section)
-  const refreshedSection = await store.fetchSection(section.key)
-  sectionData.value = refreshedSection.data
 }
 
-onMounted(async () => {
-  const section = await store.fetchSection(props.sectionKey);
+async function createModule() {
+  newModule.key = props.sectionKey
+  await store.createModule(newModule)
+  await fetchSection(props.sectionKey)
+}
+
+async function fetchSection(key) {
+  const section = await store.fetchSection(key);
   sectionData.value = section.data
+}
+
+
+
+
+onMounted(async () => {
+  await fetchSection(props.sectionKey)
+
 })
 
 </script>

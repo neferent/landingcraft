@@ -36,13 +36,14 @@ onMounted( async() => {
 
 
 </script>
-
-<template>
+ <template>
   <v-layout>
     <MainHeader></MainHeader>
     <MatrixNavDrawer :loading="matricesLoading" @loadMatrix="loadMatrix($event)"> </MatrixNavDrawer>
     <v-main class="p2">
       <EditMatrix :loading="matrixLoading"/>
     </v-main>
+    
   </v-layout>
 </template>  
+
