@@ -4,13 +4,15 @@
       loading...
     </div>
     <div v-else>
-      {{ sectionData }}
-      <div class="w-full h-auto border border-blue-200 rounded p-4 mb-12">
-        <div class="flex flex-row gap-2">
-          <div v-for="module in sectionData.modules" :key="module.key" class="flex-grow border border-red-400 rounded p-4 mb-12">
+      <div class="w-full h-auto">
+        <div class="flex flex-row">
+          <div v-for="module in sectionData.modules" :key="module.key"
+            class="flex-grow border border-blue-200 rounded p-4">
             <Module :module-key="module" />
           </div>
-          <div class="flex-grow-0 border border-red-400 rounded p-4 mb-12"> <CreateModuleButton @click="createModule" /></div>
+          <div class="flex flex-col justify-center align-center content-center flex-grow-0 px-2">
+            <CreateModuleButton @click="createModule" />
+          </div>
         </div>
       </div>
     </div>

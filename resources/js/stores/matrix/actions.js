@@ -7,6 +7,9 @@ export default {
   async fetchMatrix(key) {
     this.matrix = await matrixAPI.fetchMatrix(key);
   },
+  async createMatrix(data) {
+    await matrixAPI.createMatrix(data);
+  },
   async makeEmptySection(data) {
     await matrixAPI.makeEmptySection(data);
     this.fetchMatrix(data.key);

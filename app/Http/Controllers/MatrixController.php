@@ -35,7 +35,7 @@ class MatrixController extends Controller
     /**
      * Creates and stores a new section
      */
-    public function newMatrix(Request $request): RedirectResponse
+    public function newMatrix(Request $request)
     {
         $id = new NanoId;
         $matrix = new Matrix;
@@ -46,7 +46,6 @@ class MatrixController extends Controller
         $matrix->sections = [];
         $matrix->save();
 
-        return redirect('/matrix');
     }
 
     /**
