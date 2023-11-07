@@ -46,7 +46,7 @@ Route::controller(MatrixController::class)->group(function () {
     Route::get('matrix/edit/{key}', 'editMatrix')->name('matrix.edit');
     Route::get('matrix/fetch/{key}', 'fetchMatrix');
     Route::get('matrix/all', 'fetchAllMatrices');
-    Route::post('matrix/update/{key}', 'updateMatrix');
+    Route::post('matrix/update', 'update');
     Route::post('matrix/new', 'newMatrix');
     Route::post('matrix/section/register', 'registerSection');
     Route::post('matrix/edit/section/new', 'newSection');

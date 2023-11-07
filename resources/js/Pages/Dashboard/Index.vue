@@ -6,14 +6,48 @@
         <div class="w-8 h-8 rounded-full bg-gray-500"></div>
       </div>
     </div>
-    <div class="flex flex-row justify-around items-center w-full h-28 px-12 py-4 bg-gray-500">
-      <div>Contextual Menu{{ matrix.data }}</div>
+    <div class="flex flex-row justify-around items-center w-full h-28 px-12 py-4 bg-gray-300">
+      <div v-if="matrix.data" class="flex flex-row justify-between w-full">
+        <div>
+          <div class="flex flex-row items-center gap-4">
+            <EditableHeading large v-model="localMatrixName" @input="updateLocalMatrixName" />
+            <div @click="updateMatrix">
+              <Icon icon="material-symbols:check-circle-rounded" height="24" class="cursor-pointer text-gray-800" />
+            </div>
+          </div>
+
+          <Heading tiny>{{ matrix.data.key }}</Heading>
+        </div>
+        <div class="flex flex-row gap-4">
+
+
+
+          <div>
+            <Icon icon="material-symbols:manage-search-rounded" height="24" class="cursor-pointer text-gray-800" />
+          </div>
+          <div>
+            <Icon icon="material-symbols:more-horiz" height="24" class="cursor-pointer text-gray-800" />
+          </div>
+          
+          
+          
+          
+          
+ 
+        
+        
+        
+        </div>
+      </div>
+      <div v-else>
+        <Heading small>No Page Selected</Heading>
+      </div>
     </div>
     <div class="flex flex-row justify-around items-center w-full px-12 py-4 bg-gray-50">
 
-      <MatrixList v-if="!matrix.data" @onNewMatrix="openModal" @onOpenMatrix="loadMatrix($event)"/>
-      <Matrix v-else @onCreateSection="createSection"/>
-      
+      <MatrixList v-if="!matrix.data" @onNewMatrix="openModal" @onOpenMatrix="loadMatrix($event)" />
+      <Matrix v-else @onCreateSection="createSection" />
+
     </div>
   </div>
 
@@ -22,11 +56,11 @@
 
   <Modal :show="creatingNewMatrix" @close="creatingNewMatrix = false">
 
-    <Header medium>Create a new page</Header>
+    <Heading medium>Create a new page</Heading>
     <div class="flex flex-row items-center gap-4">
       <TextInput v-model="newMatrix.name" autofocus />
       <BasicButton @click="createMatrix">Create Page</BasicButton>
-      
+
 
     </div>
 
@@ -37,18 +71,19 @@
 
 <script setup>
 
-import Header from '@/Components/Header.vue'
+import Heading from '@/Components/Heading.vue'
+import EditableHeading from '@/Components/EditableHeading.vue'
 import TextInput from '@/Components/TextInput.vue'
 import BasicButton from '@/Components/BasicButton.vue'
 
-
+import { Icon } from '@iconify/vue';
 
 import MatrixList from '@/Components/MatrixList.vue'
 import Matrix from '@/Components/Matrix.vue'
 import { onMounted, ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import { useMatrixStore } from '@store/matrix'
-import { storeToRefs } from 'pinia'
+import { mapActions, storeToRefs } from 'pinia'
 import Modal from '@/Components/Modal.vue';
 
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
@@ -56,6 +91,11 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 const creatingNewMatrix = ref(false)
 
 const newMatrix = useForm({
+  name: '',
+})
+
+const updatedMatrix = useForm({
+  key: '',
   name: '',
 })
 
@@ -76,10 +116,15 @@ async function createSection() {
 const matricesLoading = ref(false)
 const matrixLoading = ref(false)
 
+const localMatrixName = ref('')
+
 const store = useMatrixStore();
 
 const { matrix, matrices } = storeToRefs(store);
 
+function updateLocalMatrixName(event) {
+  localMatrixName.value = event.target.innerText
+}
 
 async function createMatrix() {
   matricesLoading.value = true
@@ -87,12 +132,25 @@ async function createMatrix() {
   await store.createMatrix(newMatrix)
   await store.fetchMatrices()
   matricesLoading.value = false
-
 }
 
 async function loadMatrix(key) {
-  console.log('key', key)
-  store.fetchMatrix(key)
+  await store.fetchMatrix(key)
+  localMatrixName.value = matrix.value.data.name
+}
+
+async function updateMatrix() {
+  console.log(localMatrixName.value, matrix.value.data.name)
+
+  if (localMatrixName.value !== matrix.value.data.name) {
+    console.log('doesnt match, updating')
+    updatedMatrix.name = localMatrixName.value
+    updatedMatrix.key = matrix.value.data.key
+    console.log('o', updatedMatrix)
+    await store.updateMatrix(updatedMatrix)
+    console.log('done')
+  }
+  await store
 }
 
 function openModal() {

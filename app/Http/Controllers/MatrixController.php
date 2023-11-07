@@ -71,9 +71,15 @@ class MatrixController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function updateMatrix(Request $request, Matrix $matrix)
+    public function update(Request $request, Matrix $matrix)
     {
-        //
+        $matrix = Matrix::where('key', $request->key)->first();
+        $this->authorize('update', $matrix);
+            $validated = $request->validate([
+            'name' => 'string|max:64',
+        ]);
+
+       $matrix->update($validated);
     }
 
     /**
@@ -81,6 +87,7 @@ class MatrixController extends Controller
      */
     public function destroy(Request $request, Matrix $matrix)
     {
+        
         $matrix = Matrix::where('key', $request->key)->first();
         $this->authorize('delete', $matrix);
         $matrix->delete();

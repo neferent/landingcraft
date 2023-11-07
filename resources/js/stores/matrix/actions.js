@@ -7,6 +7,9 @@ export default {
   async fetchMatrix(key) {
     this.matrix = await matrixAPI.fetchMatrix(key);
   },
+  async updateMatrix(data) {
+    await matrixAPI.updateMatrix(data)
+  },
   async createMatrix(data) {
     await matrixAPI.createMatrix(data);
   },
@@ -27,6 +30,6 @@ export default {
   },
   async createModule(data) {
     await matrixAPI.createModule(data);
-  }
+  },
 };
 
