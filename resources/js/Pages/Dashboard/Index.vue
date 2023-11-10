@@ -22,12 +22,13 @@
 
 
 
-          <div>
-            <Icon icon="material-symbols:manage-search-rounded" height="24" class="cursor-pointer text-gray-800" />
+          <div @click="destroyMatrix">
+            <Icon icon="material-symbols:delete-rounded" height="24" class="cursor-pointer text-gray-800" />
           </div>
           <div>
             <Icon icon="material-symbols:more-horiz" height="24" class="cursor-pointer text-gray-800" />
           </div>
+          {{  matrix.data.seo }}
           
           
           
@@ -109,6 +110,12 @@ async function createSection() {
   newSection.key = matrix.value.data.key
   console.log('section key', newSection.key)
   await store.makeEmptySection(newSection)
+}
+
+async function destroyMatrix() {
+  await store.destroyMatrix(matrix.value.data.key)
+  store.clearMatrix()
+  await store.fetchMatrices()
 }
 
 

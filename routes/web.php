@@ -50,7 +50,7 @@ Route::controller(MatrixController::class)->group(function () {
     Route::post('matrix/new', 'newMatrix');
     Route::post('matrix/section/register', 'registerSection');
     Route::post('matrix/edit/section/new', 'newSection');
-    Route::delete('matrix/delete/{key}', 'destroy')->name('matrix.destroy');
+    Route::delete('matrix/destroy/{key}', 'destroy');
 })->middleware(['auth']);
 
 

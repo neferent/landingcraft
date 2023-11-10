@@ -6,20 +6,28 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Matrix extends Model
+class Seo extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'key',
-        'name',
-        'schema',
-        'sections',
-        'seo',
+        'meta_title',
+        'meta_description',
+        'canonical',
+        'og_title',
+        'og_description',
+        'og_image',
+        'allow_robots',
+        'keywords',
     ];
 
     protected $casts = [
-        'sections' => 'array',
+        'keywords' => 'array',
+    ];
+
+    protected $attributes = [
+        'keywords' => [],
     ];
 
     public function user(): BelongsTo

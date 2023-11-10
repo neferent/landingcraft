@@ -5,6 +5,7 @@ const matrixAPI = {
     fetchMatrix: (key) => API.get(`/matrix/fetch/${key}`),
     updateMatrix: (data) => API.post('/matrix/update/', data),
     createMatrix: (data) => API.post(`/matrix/new/`, data),
+    destroyMatrix: (key) => API.delete(`/matrix/destroy/${key}`),
     makeEmptySection: (data) => API.post('/section/create', data),
     fetchSection: (key) => API.get(`/section/fetch/${key}`),
     registerSection: (data) => API.post('/section/register', data),

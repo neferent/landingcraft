@@ -13,6 +13,12 @@ export default {
   async createMatrix(data) {
     await matrixAPI.createMatrix(data);
   },
+  async destroyMatrix(key) {
+    await matrixAPI.destroyMatrix(key);
+  },
+  clearMatrix() {
+    this.matrix = {};
+  },
   async makeEmptySection(data) {
     await matrixAPI.makeEmptySection(data);
     this.fetchMatrix(data.key);

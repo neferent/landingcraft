@@ -6,6 +6,7 @@ use App\Models\Matrix;
 use App\Models\Section;
 use App\Models\User;
 use App\Models\NanoId;
+use App\Models\Seo;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -35,7 +36,7 @@ class MatrixController extends Controller
     /**
      * Creates and stores a new section
      */
-    public function newMatrix(Request $request)
+    public function newMatrix(Request $request, Seo $seo)
     {
         $id = new NanoId;
         $matrix = new Matrix;
@@ -44,8 +45,16 @@ class MatrixController extends Controller
         $matrix->name = $request->name;
         $matrix->schema = 'default';
         $matrix->sections = [];
-        $matrix->save();
 
+
+
+        $seo = new Seo;
+        return $seo;
+        //$newSeo = $seo->create();
+
+       // $matrix->seo = $newSeo->key;
+
+        //$matrix->save();
     }
 
     /**
@@ -87,11 +96,9 @@ class MatrixController extends Controller
      */
     public function destroy(Request $request, Matrix $matrix)
     {
-        
         $matrix = Matrix::where('key', $request->key)->first();
         $this->authorize('delete', $matrix);
         $matrix->delete();
-       // return redirect()->route('matrix.index');
     }
 
     /** 
